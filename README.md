@@ -14,6 +14,19 @@ On a typical game team, QA work is spread across an issue tracker, a chat tool, 
 - Test cases get edited after a run, and the run's history quietly changes.
 - "Are we good to ship?" gets answered from memory instead of from evidence, and nobody can say later what the evidence was.
 
+## One place for QA work
+
+A QA lead's day usually involves a dozen tabs: ClickUp or Jira for bugs, TestRail or a spreadsheet for test cases, Slack for announcements and questions, a wiki for test plans, a CI page for builds and a few dashboards. The work falls into the gaps between them.
+
+Checkpoint is meant to be the **single place where QA work happens**. You capture, triage, test and decide here. Checkpoint then writes to the tools the rest of the team already uses, through API connectors:
+
+- **Issue tracking:** ClickUp, Jira, Linear, GitHub Issues, Azure DevOps
+- **Test management:** TestRail, Zephyr Scale, Xray, Qase
+- **Team chat:** Slack, Microsoft Teams, Discord
+- **Docs and builds:** Confluence, Notion, GitHub Actions, Jenkins
+
+Developers stay in their tracker and producers stay in Slack. QA gets one view instead of ten tabs. Every connector implements a provider-neutral interface, so any tool with an API can be added. See **[docs/INTEGRATIONS.md](docs/INTEGRATIONS.md)** for the design and what each tool does in the workflow.
+
 ## What it does
 
 | Area | What you can do |
@@ -81,11 +94,15 @@ Domain code depends only on the adapter interfaces. A live version would add a s
 
 ## Integration status
 
-| Integration | Status |
-| --- | --- |
-| Issue tracker | Mock adapter only |
-| Team chat | Mock adapter only |
-| Draft from notes | Deterministic. It only rearranges the text you wrote and never invents steps or results. |
+| Integration | Interface | Status |
+| --- | --- | --- |
+| Issue tracker (ClickUp, Jira, Linear, GitHub Issues, Azure DevOps) | `IssueTracker` | Mock adapter in the demo, live adapters planned |
+| Test management (TestRail, Zephyr Scale, Xray, Qase) | `TestManagement` | Interface defined, adapters planned |
+| Team chat (Slack, Microsoft Teams, Discord) | `TeamMessaging` | Mock adapter in the demo, live adapters planned |
+| Docs and builds (Confluence, Notion, GitHub Actions, Jenkins) | `LinkSource` | Interface defined, adapters planned |
+| Draft from notes | n/a | Deterministic. It only rearranges the text you wrote and never invents steps or results. |
+
+The connector catalog is in `src/integrations/catalog.ts` and is shown under **Settings → Connectors**.
 
 ## Known limitations
 

@@ -3,7 +3,8 @@ import { RotateCcw } from 'lucide-react';
 import { useAppState } from '../data/state';
 import { resetDemo, setFaults, typeLabel, updateRoute, updateSettings } from '../data/actions';
 import { projectName } from '../data/selectors';
-import { Callout, Card, Dialog, JobBadge, formatTime, useToast } from '../components/ui';
+import { Callout, Card, Dialog, JobBadge, SafeLink, formatTime, useToast } from '../components/ui';
+import { CATEGORIES, CONNECTORS } from '../integrations/catalog';
 import { JobRow } from './Capture';
 
 export function SettingsPage() {
@@ -37,6 +38,29 @@ export function SettingsPage() {
                 </tbody>
               </table>
             </div>
+          </div>
+        </Card>
+
+        <Card title="Connectors">
+          <div className="stack">
+            <p className="muted">One workspace in front of the tools your team already uses. Each connector implements a provider-neutral interface, so you can swap ClickUp for Jira, or Slack for Teams, without changing how QA works here. Only the mock connectors run in this demo.</p>
+            {CATEGORIES.map((cat) => (
+              <div key={cat} className="table-wrap">
+                <table aria-label={`${cat} connectors`}>
+                  <thead><tr><th>{cat}</th><th>What syncs</th><th>Auth</th><th>Status</th></tr></thead>
+                  <tbody>
+                    {CONNECTORS.filter((c) => c.category === cat).map((c) => (
+                      <tr key={c.id}>
+                        <td><strong>{c.docsUrl ? <SafeLink href={c.docsUrl}>{c.name}</SafeLink> : c.name}</strong><div className="subtle">{c.implements}</div></td>
+                        <td>{c.syncs}</td>
+                        <td>{c.auth}</td>
+                        <td>{c.status === 'mock' ? <span className="badge good">Active in demo</span> : <span className="badge lav">Planned</span>}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ))}
           </div>
         </Card>
 
