@@ -2,7 +2,7 @@
 
 **From finding to release confidence.** QA Workspace is one place for game QA teams to capture bugs, feedback and questions, triage them, run test cases, and make a release recommendation backed by evidence.
 
-**[Live demo](https://heloisatorres1.github.io/checkpoint/)** · [![CI and Pages](https://github.com/heloisatorres1/checkpoint/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/heloisatorres1/checkpoint/actions/workflows/deploy-pages.yml)
+**[Live demo](https://heloisatorres1.github.io/qa-workspace/)** · [![CI and Pages](https://github.com/heloisatorres1/qa-workspace/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/heloisatorres1/qa-workspace/actions/workflows/deploy-pages.yml)
 
 > Portfolio demo. All data is fictional (project *Orbit Garden*, build 0.8.4) and every integration is a mock. Nothing leaves your browser.
 
