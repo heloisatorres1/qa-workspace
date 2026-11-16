@@ -166,9 +166,11 @@ export async function processPending(): Promise<void> {
   running = true;
   try {
     for (;;) {
-      const job = store().get().jobs.slice().reverse().find((j) => j.status === 'pending');
+      const job = store().get().jobs.slice().reverse().find((j) => j.status === 'pending' && !inFlight.has(j.id));
       if (!job) break;
+      const queuedIn = epoch;
       await sleep(config.deliveryDelayMs);
+      if (queuedIn !== epoch) continue;
       await runJob(job);
     }
   } finally {
@@ -176,7 +178,22 @@ export async function processPending(): Promise<void> {
   }
 }
 
+// Bumped by resetDemo so a delivery that was in flight cannot write into fresh fixtures.
+let epoch = 0;
+const inFlight = new Set<ID>();
+
 async function runJob(job: DeliveryJob) {
+  if (inFlight.has(job.id)) return;
+  inFlight.add(job.id);
+  try {
+    await runJobOnce(job);
+  } finally {
+    inFlight.delete(job.id);
+  }
+}
+
+async function runJobOnce(job: DeliveryJob) {
+  const startedIn = epoch;
   const s = store().get();
   const result = await processJob(job, {
     adapters: adapters(),
@@ -184,6 +201,7 @@ async function runJob(job: DeliveryJob) {
     projectKey: (pid) => s.projects.find((p) => p.id === pid)?.key ?? 'X',
     now: nowIso,
   });
+  if (startedIn !== epoch) return;
   update((st) => {
     let findings = st.findings;
     let sessions = st.sessions;
@@ -500,5 +518,6 @@ export function updateSettings(patch: Partial<AppState['settings']>) {
 }
 
 export function resetDemo() {
+  epoch++;
   store().replace(seed(new Date()));
 }

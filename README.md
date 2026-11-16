@@ -2,6 +2,8 @@
 
 **From finding to release confidence.** QA Workspace is one place for game QA teams to capture bugs, feedback and questions, triage them, run test cases, and make a release recommendation backed by evidence.
 
+**[Live demo](https://heloisatorres1.github.io/checkpoint/)** · [![CI and Pages](https://github.com/heloisatorres1/checkpoint/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/heloisatorres1/checkpoint/actions/workflows/deploy-pages.yml)
+
 > Portfolio demo. All data is fictional (project *Orbit Garden*, build 0.8.4) and every integration is a mock. Nothing leaves your browser.
 
 ## The problem
@@ -77,6 +79,7 @@ Your changes are kept in this browser's local storage. **Settings → Reset demo
 
 - **Unit tests** cover the domain rules: metrics and the zero-denominator case, run snapshots and retest history, completing a run with work left, finding validation, chat escaping, release validation and frozen revisions, outbox retry and timeout reconciliation, digest pagination, de-duplication, chunking and resume.
 - **End-to-end tests** (Playwright) cover these journeys: report → review → submit, chat failure → single retry, timeout → reconcile, failed case → linked bug, digest partial fetch and partial send, release Hold → frozen message → send, refresh persistence and reset, keyboard search, and the narrow layout. Every journey also checks that **no request leaves localhost**.
+- **Continuous integration**: every push runs the type check, unit tests, end-to-end tests and the build on GitHub Actions. The demo is published to GitHub Pages only when all of them pass.
 - **Accessibility**: labelled controls, inline errors linked with `aria-describedby`, focus moved to the first invalid field, a skip link, focus-trapped dialogs that close with Escape, and status shown with text and icons, never color alone. Night mode follows the system setting and can be switched in the top bar (System, Light, Dark).
 
 ## Architecture

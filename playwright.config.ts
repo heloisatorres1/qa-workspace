@@ -6,6 +6,8 @@ export default defineConfig({
   testIgnore: process.env.SCREENS ? [] : ['**/_screens.spec.ts'],
   fullyParallel: true,
   reporter: 'list',
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 1 : 0,
   use: { baseURL: 'http://localhost:5179', trace: 'retain-on-failure' },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 1000 } } }],
   webServer: { command: 'npx vite --port 5179 --strictPort', url: 'http://localhost:5179', reuseExistingServer: true },
