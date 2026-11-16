@@ -1,7 +1,7 @@
 {
-  "name": "checkpoint",
+  "name": "qa-workspace",
   "version": "0.1.0",
-  "description": "Checkpoint, a QA workspace: from finding to release confidence.",
+  "description": "QA Workspace: from finding to release confidence.",
   "private": true,
   "type": "module",
   "license": "UNLICENSED",

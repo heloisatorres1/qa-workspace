@@ -317,7 +317,7 @@ function Sessions() {
           </div>
         )}
       </Card>
-      <p className="hint" style={{ marginTop: 8 }}>Closing a session stops new submissions to it in Checkpoint. It does not lock the chat thread itself.</p>
+      <p className="hint" style={{ marginTop: 8 }}>Closing a session stops new submissions to it in QA Workspace. It does not lock the chat thread itself.</p>
       {open && pid && <SessionDialog projectId={pid} onClose={() => setOpen(false)} onCreated={() => setOpen(false)} />}
     </>
   );

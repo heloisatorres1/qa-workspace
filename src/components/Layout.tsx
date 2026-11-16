@@ -42,7 +42,7 @@ export function Layout() {
       </a>
       <aside className="sidebar" aria-label="Main navigation">
         <NavLink to="/" className="brand">
-          <strong>Checkpoint</strong>
+          <strong>QA Workspace</strong>
           <span>QA workspace</span>
         </NavLink>
         <nav className="nav">

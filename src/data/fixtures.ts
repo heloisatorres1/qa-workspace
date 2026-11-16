@@ -383,7 +383,7 @@ export function seed(nowDate: Date = new Date()): AppState {
       updatedAt: ago(10),
       findingId: f.id,
     }));
-  // Created directly in the tracker by a developer, with a status Checkpoint does not map.
+  // Created directly in the tracker by a developer, with a status QA Workspace does not map.
   tasks.push({ externalId: 'TSK-3290', projectKey: 'OG', list: 'Bugs', title: 'Sprinkler sometimes waters the wrong tile', status: 'needs info', severity: 'normal', url: 'https://tracker.example.com/t/TSK-3290', updatedAt: ago(90) });
   for (const f of findings) if (f.external) f.external.remoteStatus = tasks.find((t) => t.externalId === f.external!.externalId)!.status;
 

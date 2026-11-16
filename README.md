@@ -1,6 +1,6 @@
-# Checkpoint
+# QA Workspace
 
-**From finding to release confidence.** Checkpoint is a QA workspace for game teams: one place to capture bugs, feedback and questions, triage them, run test cases, and make a release recommendation backed by evidence.
+**From finding to release confidence.** QA Workspace is one place for game QA teams to capture bugs, feedback and questions, triage them, run test cases, and make a release recommendation backed by evidence.
 
 > Portfolio demo. All data is fictional (project *Orbit Garden*, build 0.8.4) and every integration is a mock. Nothing leaves your browser.
 
@@ -18,7 +18,7 @@ On a typical game team, QA work is spread across an issue tracker, a chat tool, 
 
 A QA lead's day usually involves a dozen tabs: ClickUp or Jira for bugs, TestRail or a spreadsheet for test cases, Slack for announcements and questions, a wiki for test plans, a CI page for builds and a few dashboards. The work falls into the gaps between them.
 
-Checkpoint is meant to be the **single place where QA work happens**. You capture, triage, test and decide here. Checkpoint then writes to the tools the rest of the team already uses, through API connectors:
+QA Workspace is meant to be the **single place where QA work happens**. You capture, triage, test and decide here. QA Workspace then writes to the tools the rest of the team already uses, through API connectors:
 
 - **Issue tracking:** ClickUp, Jira, Linear, GitHub Issues, Azure DevOps
 - **Test management:** TestRail, Zephyr Scale, Xray, Qase
@@ -45,7 +45,7 @@ Developers stay in their tracker and producers stay in Slack. QA gets one view i
 - **Severity is not priority.** Severity is player impact and priority is fix order, so they are two separate required fields.
 - **A question is not a bug.** Questions have an owner and an answer. Converting one to a bug is a deliberate action that creates a linked draft.
 - **Saved is not the same as delivered.** Submitting stores the record first, then queues one delivery job per destination. Each job has its own status (pending, delivered, failed or uncertain) and its own retry. If chat fails after the ticket was created, retrying only re-sends the message.
-- **Timeouts are treated as "maybe".** A ticket request that times out may have landed. Before retrying, Checkpoint looks it up by dedupe key, so it never creates a duplicate blindly.
+- **Timeouts are treated as "maybe".** A ticket request that times out may have landed. Before retrying, QA Workspace looks it up by dedupe key, so it never creates a duplicate blindly.
 - **Digests are all or nothing.** A partial fetch cannot be published, statuses come from an explicit mapping (no guessing from titles), and unmapped items show up in a "Needs review" group.
 - **History doesn't change after the fact.** A run stores a copy of each case revision, results are append-only, and a saved release decision keeps its evidence and message even after bugs or tests change. New evidence means a new revision.
 - **No automatic approval.** Metrics inform the decision but never make it. "Ready" is unavailable while critical bugs are open, and every accepted risk needs a rationale and an owner.

@@ -401,7 +401,7 @@ function DeliveryPreview({ draft }: { draft: CaptureDraft }) {
           </div>
         )}
 
-        {nothing && <Callout tone="warn">No destination selected. Submitting will only save the record in Checkpoint.</Callout>}
+        {nothing && <Callout tone="warn">No destination selected. Submitting will only save the record in QA Workspace.</Callout>}
 
         <label className="check">
           <input type="checkbox" disabled={!session} checked={inThread} onChange={(e) => set({ postInThread: e.target.checked })} />
@@ -433,7 +433,7 @@ function ConfirmSubmit({ draft, onClose, onSubmit }: { draft: CaptureDraft; onCl
       <div className="stack">
         <p><strong>{draft.fields.title}</strong></p>
         <div>
-          <p style={{ marginBottom: 6 }}>Checkpoint will save the record first, then:</p>
+          <p style={{ marginBottom: 6 }}>QA Workspace will save the record first, then:</p>
           {dests.length ? <ul style={{ margin: 0 }}>{dests.map((d) => <li key={d}>{d}</li>)}</ul> : <p className="muted">Nothing else. No destination is selected.</p>}
         </div>
         <Callout>Demo mode: deliveries go to mock adapters. No real ticket or message is created.</Callout>
@@ -522,7 +522,7 @@ function Submitted({ id, onNew }: { id: string; onNew: () => void }) {
       </div>
       <Card title="Delivery status">
         <div className="stack">
-          <Callout tone="good">Saved in Checkpoint. This record exists even if a delivery below fails.</Callout>
+          <Callout tone="good">Saved in QA Workspace. This record exists even if a delivery below fails.</Callout>
           {summary === 'none' && <p className="muted">No destinations were selected.</p>}
           {summary === 'partial' && <Callout tone="warn">Partially delivered. Retry only the failed destination; delivered ones are not repeated.</Callout>}
           {jobs.map((j) => <JobRow key={j.id} jobId={j.id} />)}

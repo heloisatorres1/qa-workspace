@@ -58,7 +58,7 @@ export interface AppState {
   };
 }
 
-export const STORAGE_KEY = 'checkpoint.demo.v1';
+export const STORAGE_KEY = 'qa-workspace.demo.v1';
 export const SCHEMA_VERSION = 1;
 
 type Listener = () => void;

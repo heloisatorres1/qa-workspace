@@ -126,7 +126,7 @@ function FindingsView() {
                       <td>{f.priority ? <span className="badge lav square">{f.priority}</span> : <span className="subtle">—</span>}</td>
                       <td><StatusBadge value={f.status} /></td>
                       <td className="nowrap">{personName(s, f.ownerId)}</td>
-                      <td className="nowrap subtle">{f.external ? `${f.external.externalId} · ${timeAgo(f.external.syncedAt)}` : 'Checkpoint'}</td>
+                      <td className="nowrap subtle">{f.external ? `${f.external.externalId} · ${timeAgo(f.external.syncedAt)}` : 'QA Workspace'}</td>
                     </tr>
                   );
                 })}
