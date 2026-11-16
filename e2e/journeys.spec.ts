@@ -176,3 +176,20 @@ test('narrow layout: navigation collapses behind a menu button', async ({ page }
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(0);
 });
+
+test('night mode follows the system and can be switched by hand', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await page.goto('/#/');
+  const bg = () => page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+  expect(await bg()).toBe('rgb(15, 24, 32)');
+
+  await page.getByRole('button', { name: /^Theme: System/ }).click();
+  expect(await bg()).toBe('rgb(246, 247, 245)');
+  await page.reload();
+  await expect(page.getByRole('button', { name: /^Theme: Light/ })).toBeVisible();
+  expect(await bg()).toBe('rgb(246, 247, 245)');
+
+  await page.getByRole('button', { name: /^Theme: Light/ }).click();
+  await expect(page.getByRole('button', { name: /^Theme: Dark/ })).toBeVisible();
+  expect(await bg()).toBe('rgb(15, 24, 32)');
+});

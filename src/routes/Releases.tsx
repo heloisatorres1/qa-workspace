@@ -75,7 +75,7 @@ function EvidenceSnapshotCard({ e, title = 'Evidence snapshot', note }: { e: Evi
       </div>
       <div className="stacked-bar" role="img" aria-label={tiles.map((t) => `${t.label} ${e.counts[t.k]}`).join(', ')}>
         {tiles.map((t) => e.counts[t.k] > 0 && (
-          <span key={t.k} style={{ flex: e.counts[t.k], background: RESULT_COLOR[t.k], color: t.k === 'passed' ? '#fff' : 'var(--ink)' }}>
+          <span key={t.k} style={{ flex: e.counts[t.k], background: RESULT_COLOR[t.k], color: t.k === 'passed' ? 'var(--on-passed)' : 'var(--ink)' }}>
             {pct(e.counts[t.k]) >= 12 ? `${pct(e.counts[t.k]).toFixed(1)}%` : ''}
           </span>
         ))}

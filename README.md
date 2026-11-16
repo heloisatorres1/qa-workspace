@@ -77,7 +77,7 @@ Your changes are kept in this browser's local storage. **Settings → Reset demo
 
 - **Unit tests** cover the domain rules: metrics and the zero-denominator case, run snapshots and retest history, completing a run with work left, finding validation, chat escaping, release validation and frozen revisions, outbox retry and timeout reconciliation, digest pagination, de-duplication, chunking and resume.
 - **End-to-end tests** (Playwright) cover these journeys: report → review → submit, chat failure → single retry, timeout → reconcile, failed case → linked bug, digest partial fetch and partial send, release Hold → frozen message → send, refresh persistence and reset, keyboard search, and the narrow layout. Every journey also checks that **no request leaves localhost**.
-- **Accessibility**: labelled controls, inline errors linked with `aria-describedby`, focus moved to the first invalid field, a skip link, focus-trapped dialogs that close with Escape, and status shown with text and icons, never color alone.
+- **Accessibility**: labelled controls, inline errors linked with `aria-describedby`, focus moved to the first invalid field, a skip link, focus-trapped dialogs that close with Escape, and status shown with text and icons, never color alone. Night mode follows the system setting and can be switched in the top bar (System, Light, Dark).
 
 ## Architecture
 
@@ -108,4 +108,4 @@ The connector catalog is in `src/integrations/catalog.ts` and is shown under **S
 
 - Single user, no authentication. Data lives in one browser.
 - Attachments are recorded as file details only. Their contents are not stored.
-- No automation-result import, scheduled digests, dark theme or live adapters yet.
+- No automation-result import, scheduled digests or live adapters yet.

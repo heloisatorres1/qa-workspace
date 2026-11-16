@@ -285,7 +285,7 @@ export function Donut({ segments, size = 150, label, sub }: { segments: { value:
   let offset = 0;
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label={segments.map((s) => `${s.label} ${s.value}`).join(', ')}>
-      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#eef0f2" strokeWidth={22} />
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" style={{ stroke: 'var(--neutral-soft)' }} strokeWidth={22} />
       {segments.map((s) => {
         const len = (s.value / total) * c;
         const el = (
@@ -295,7 +295,7 @@ export function Donut({ segments, size = 150, label, sub }: { segments: { value:
             cy={size / 2}
             r={r}
             fill="none"
-            stroke={s.color}
+            style={{ stroke: s.color }}
             strokeWidth={22}
             strokeDasharray={`${len} ${c - len}`}
             strokeDashoffset={-offset}
@@ -305,17 +305,17 @@ export function Donut({ segments, size = 150, label, sub }: { segments: { value:
         offset += len;
         return el;
       })}
-      <text x="50%" y="48%" textAnchor="middle" fontSize="28" fontWeight="700" fill="#172b3a">
+      <text x="50%" y="48%" textAnchor="middle" fontSize="28" fontWeight="700" style={{ fill: 'var(--ink)' }}>
         {label}
       </text>
-      <text x="50%" y="64%" textAnchor="middle" fontSize="13" fill="#4a5c6a">
+      <text x="50%" y="64%" textAnchor="middle" fontSize="13" style={{ fill: 'var(--ink-2)' }}>
         {sub}
       </text>
     </svg>
   );
 }
 
-export const RESULT_COLOR: Record<ResultValue, string> = { passed: '#16897e', failed: '#e5675d', blocked: '#e8a93a', untested: '#d5dade', na: '#eef0f2' };
+export const RESULT_COLOR: Record<ResultValue, string> = { passed: 'var(--res-passed)', failed: 'var(--res-failed)', blocked: 'var(--res-blocked)', untested: 'var(--res-untested)', na: 'var(--res-na)' };
 
 /**
  * Renders the small chat markup subset used in previews: *bold* and

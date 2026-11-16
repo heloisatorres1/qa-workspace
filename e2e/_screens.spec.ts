@@ -1,5 +1,7 @@
 import { test } from '@playwright/test';
 
+if (process.env.SCREENS_DARK) test.use({ colorScheme: 'dark' });
+
 // Design-review helper: SCREENS=1 SCREENS_DIR=<folder> npx playwright test e2e/_screens.spec.ts
 const out = process.env.SCREENS_DIR ?? 'test-results/screens';
 const pages: [string, string][] = [

@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { Camera, FlaskConical, Folder, Home, Layers, Menu, Package, Search, Settings } from 'lucide-react';
+import { Camera, FlaskConical, Folder, Home, Layers, Menu, Monitor, Moon, Package, Search, Settings, Sun } from 'lucide-react';
+import { applyTheme, nextTheme, readTheme, type ThemePref } from '../theme';
+
+const THEME_LABEL: Record<ThemePref, string> = { system: 'System', light: 'Light', dark: 'Dark' };
 import { useAppState } from '../data/state';
 import { setScope } from '../data/actions';
 
@@ -17,6 +20,8 @@ export function Layout() {
   const s = useAppState();
   const [navOpen, setNavOpen] = useState(false);
   const [q, setQ] = useState('');
+  const [theme, setTheme] = useState<ThemePref>(readTheme);
+  const ThemeIcon = theme === 'dark' ? Moon : theme === 'light' ? Sun : Monitor;
   const search = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const loc = useLocation();
@@ -43,7 +48,6 @@ export function Layout() {
       <aside className="sidebar" aria-label="Main navigation">
         <NavLink to="/" className="brand">
           <strong>QA Workspace</strong>
-          <span>QA workspace</span>
         </NavLink>
         <nav className="nav">
           {NAV.map(({ to, label, icon: Icon, end }) => (
@@ -112,6 +116,18 @@ export function Layout() {
               Ctrl K
             </span>
           </form>
+          <button
+            className="icon-btn"
+            aria-label={`Theme: ${THEME_LABEL[theme]}. Switch to ${THEME_LABEL[nextTheme(theme)]}`}
+            title={`Theme: ${THEME_LABEL[theme]}`}
+            onClick={() => {
+              const t = nextTheme(theme);
+              applyTheme(t);
+              setTheme(t);
+            }}
+          >
+            <ThemeIcon size={20} aria-hidden />
+          </button>
           <span className="badge demo" title="Demo mode: mock integrations, fictional data. Nothing leaves this browser.">
             Demo
           </span>
