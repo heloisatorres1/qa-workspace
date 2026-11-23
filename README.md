@@ -38,6 +38,7 @@ Developers stay in their tracker and producers stay in Slack. QA gets one view i
 | **Triage** | Filter by type, severity, status, build and owner. Assign owners, link duplicates, answer questions or deliberately convert one into a bug. |
 | **Bug digest** | Fetch every page from the tracker, de-duplicate, group open bugs by severity, preview the parent message and its thread replies, then send. A partial send resumes where it stopped. |
 | **Test Lab** | Cases (with revisions), suites, runs and sessions. Record results and retests, report a bug straight from a failure, and complete a run with an explicit reason for anything left untested. |
+| **QA Tasks** | The QA team's own work, not bugs: new or updated automation, test coverage, reviews and meetings. Board (drag cards with mouse, touch or keyboard) or list, with owners, due dates, overdue warnings and a My tasks filter. Tasks can link to a suite, run, release or Library item. |
 | **Releases** | Evidence → Decision → Message. A human chooses Ready, Ready with accepted risks, or Hold. Saving freezes the evidence and the message as a revision. |
 | **Library** | Tagged, searchable links to repos, dashboards, boards, docs and builds. |
 | **Settings** | Routing per project and finding type, tracker status mapping, failure simulation, delivery log and demo reset. |
