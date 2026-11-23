@@ -276,6 +276,31 @@ textarea.input { min-height: 84px; resize: vertical; }
 .filters .grow { flex: 1 1 220px; }
 
 /* ---- Responsive -------------------------------------------------------- */
+/* QA tasks */
+.seg { display: inline-flex; }
+.seg .btn { border-radius: 0; gap: 6px; }
+.seg .btn:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+.seg .btn:last-child { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin-left: -1px; }
+.seg .btn[aria-pressed='true'] { background: var(--teal-soft); border-color: var(--teal); color: var(--teal); position: relative; }
+.board { display: grid; grid-template-columns: repeat(4, minmax(240px, 1fr)); gap: 14px; overflow-x: auto; padding-bottom: 8px; align-items: start; }
+.board-col { background: var(--neutral-soft); border-radius: var(--radius); padding: 10px; min-height: 160px; border: 2px solid transparent; }
+.board-col.over { border-color: var(--teal); }
+.board-col-head { font-size: 14px; margin: 2px 4px 10px; display: flex; align-items: center; gap: 8px; }
+.board-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; min-height: 60px; }
+.board-empty { color: var(--ink-3); font-size: 13px; text-align: center; padding: 18px 0; border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); }
+.task-card { touch-action: manipulation; }
+.task-card.dragging { opacity: 0.4; }
+.task-card-body { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 10px 10px 12px; box-shadow: var(--shadow); cursor: grab; display: flex; flex-direction: column; gap: 6px; }
+.task-card-body.overlay { cursor: grabbing; box-shadow: 0 8px 24px rgba(20, 37, 53, 0.18); }
+.drag-handle { padding: 2px; cursor: grab; touch-action: none; }
+.task-title { border: 0; background: none; padding: 0; text-align: left; font: inherit; font-weight: 600; color: var(--ink); cursor: pointer; }
+.task-title:hover { color: var(--teal); text-decoration: underline; }
+.task-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 13px; color: var(--ink-2); }
+.due { display: inline-flex; align-items: center; gap: 4px; }
+.due.late { color: var(--red); }
+.th-btn { border: 0; background: none; padding: 0; font: inherit; color: inherit; cursor: pointer; }
+.th-btn:hover { color: var(--ink); text-decoration: underline; }
+
 @media (max-width: 1180px) {
   .cols-main-side, .cols-3 { grid-template-columns: minmax(0, 1fr); }
   .cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }

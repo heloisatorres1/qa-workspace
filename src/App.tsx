@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { ToastHost } from './components/ui';
@@ -7,6 +8,8 @@ import { Triage } from './routes/Triage';
 import { TestLab } from './routes/TestLab';
 import { RunDetail } from './routes/RunDetail';
 import { Releases } from './routes/Releases';
+// The task board pulls in the drag-and-drop library, so it loads only when opened.
+const Tasks = lazy(() => import('./routes/Tasks').then((m) => ({ default: m.Tasks })));
 import { Library } from './routes/Library';
 import { SettingsPage } from './routes/Settings';
 import { SearchPage } from './routes/Search';
@@ -26,6 +29,7 @@ export function App() {
             <Route path="test-lab" element={<TestLab />} />
             <Route path="test-lab/:tab" element={<TestLab />} />
             <Route path="test-lab/runs/:runId" element={<RunDetail />} />
+            <Route path="tasks" element={<Suspense fallback={<p className="subtle">Loading tasks…</p>}><Tasks /></Suspense>} />
             <Route path="releases" element={<Releases />} />
             <Route path="releases/:releaseId" element={<Releases />} />
             <Route path="library" element={<Library />} />

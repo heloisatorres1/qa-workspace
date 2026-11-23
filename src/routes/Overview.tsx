@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
-import { AlertTriangle, ArrowRight, Box, Bug, FileText, Mail, MessageCircle, Play, Plus, Ticket } from 'lucide-react';
+import { AlertTriangle, ArrowRight, Box, Bug, FileText, ListChecks, Mail, MessageCircle, Play, Plus, Ticket } from 'lucide-react';
 import { useAppState } from '../data/state';
-import { buildLabel, currentRelease, personName, projectName, scopedFindings, scopedRuns } from '../data/selectors';
+import { buildLabel, currentRelease, inScope, personName, projectName, scopedFindings, scopedRuns } from '../data/selectors';
+import { isOverdue } from '../domain/tasks';
 import { isAwaitingAnswer, isOpen } from '../domain/findings';
 import { countResults, formatPercent, runMetrics } from '../domain/metrics';
 import { runProgress } from '../domain/runs';
@@ -20,6 +21,8 @@ export function Overview() {
   const activeRuns = scopedRuns(s).filter((r) => r.status === 'active');
   const awaiting = findings.filter(isAwaitingAnswer);
   const release = currentRelease(s);
+  const myTasks = s.tasks.filter((t) => inScope(s, t) && t.ownerId === s.currentUserId && t.status !== 'done');
+  const myOverdue = myTasks.filter((t) => isOverdue(t)).length;
   const scopeTitle = s.ui.projectId === 'all' ? 'All projects' : `${projectName(s, s.ui.projectId)} · Build ${buildLabel(s, s.ui.buildId ?? undefined)}`;
 
   const queue = [...openBugs]
@@ -33,6 +36,10 @@ export function Overview() {
           <h1>Quality at a glance</h1>
           <div className="meta">
             {scopeTitle} <span className="badge demo">Demo data</span>
+            <Link to="/tasks?mine=1" className="link-btn">
+              <ListChecks size={15} aria-hidden /> My open tasks: {myTasks.length}
+              {myOverdue > 0 && <span className="badge bad">{myOverdue} overdue</span>}
+            </Link>
           </div>
         </div>
         <Link to="/capture" className="btn primary lg">

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { Camera, FlaskConical, Folder, Home, Layers, Menu, Monitor, Moon, Package, Search, Settings, Sun } from 'lucide-react';
+import { Camera, FlaskConical, Folder, Home, Layers, ListChecks, Menu, Monitor, Moon, Package, Search, Settings, Sun } from 'lucide-react';
 import { applyTheme, nextTheme, readTheme, type ThemePref } from '../theme';
 
 const THEME_LABEL: Record<ThemePref, string> = { system: 'System', light: 'Light', dark: 'Dark' };
@@ -12,6 +12,7 @@ const NAV = [
   { to: '/capture', label: 'Capture', icon: Camera },
   { to: '/triage', label: 'Triage', icon: Layers },
   { to: '/test-lab', label: 'Test Lab', icon: FlaskConical },
+  { to: '/tasks', label: 'QA Tasks', icon: ListChecks },
   { to: '/releases', label: 'Releases', icon: Package },
   { to: '/library', label: 'Library', icon: Folder },
 ];
@@ -109,9 +110,9 @@ export function Layout() {
           >
             <Search size={17} aria-hidden />
             <label htmlFor="global-search" className="sr-only">
-              Search findings, cases, runs and links
+              Search findings, cases, runs, tasks and links
             </label>
-            <input ref={search} id="global-search" type="search" placeholder="Search findings, tests, runs, links…" value={q} onChange={(e) => setQ(e.target.value)} />
+            <input ref={search} id="global-search" type="search" placeholder="Search findings, tests, tasks, links…" value={q} onChange={(e) => setQ(e.target.value)} />
             <span className="kbd" aria-hidden>
               Ctrl K
             </span>

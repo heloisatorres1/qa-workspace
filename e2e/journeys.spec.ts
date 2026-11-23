@@ -160,7 +160,7 @@ test('refresh keeps changes, reset restores fixtures', async ({ page }) => {
 test('keyboard: Ctrl+K focuses search and Enter searches', async ({ page }) => {
   await page.goto('/#/');
   await page.keyboard.press('Control+k');
-  await expect(page.getByLabel('Search findings, cases, runs and links')).toBeFocused();
+  await expect(page.getByLabel('Search findings, cases, runs, tasks and links')).toBeFocused();
   await page.keyboard.type('greenhouse');
   await page.keyboard.press('Enter');
   await expect(page.getByRole('heading', { name: /Findings \(/ })).toBeVisible();
