@@ -5,10 +5,12 @@ import type {
   CaseRevision,
   DeliveryJob,
   Finding,
+  ID,
   Person,
   Platform,
   Priority,
   Project,
+  QaTask,
   Release,
   ResourceLink,
   ResultAttempt,
@@ -18,8 +20,12 @@ import type {
   Session,
   Severity,
   Suite,
+  TaskLink,
+  TaskStatus,
+  TaskType,
   TestCase,
 } from '../domain/types';
+import { localDate } from '../domain/tasks';
 import { noFaults, type MockRemote, type RemoteMessage } from '../integrations/mock';
 import type { RemoteTask } from '../integrations/types';
 import { createRun } from '../domain/runs';
@@ -447,6 +453,7 @@ export function seed(nowDate: Date = new Date()): AppState {
     routes,
     jobs,
     events,
+    tasks: seedTasks(now),
     ledgers: [],
     remote,
     settings: { statusMapping: DEFAULT_STATUS_MAPPING, digestChannel: '#demo-qa', releaseChannel: '#demo-releases', lastSyncAt: ago(7) },
@@ -464,4 +471,46 @@ export function seed(nowDate: Date = new Date()): AppState {
       },
     },
   };
+}
+
+/** The QA team's own work items. Due dates are relative to `now` so some are always overdue. */
+export function seedTasks(now: number): QaTask[] {
+  const day = 86_400_000;
+  const iso = (offsetDays: number) => new Date(now + offsetDays * day).toISOString();
+  const due = (offsetDays: number) => localDate(new Date(now + offsetDays * day));
+  const rows: [string, string, string, TaskType, TaskStatus, ID, Priority, number | null, TaskLink | undefined, string][] = [
+    ['task-1', 'og', 'Automate the delivery quest flow', 'automation_new', 'todo', 'u-alex', 'P2', 6, { kind: 'suite', id: 'suite-progression' }, 'Cover accept, deliver and reward steps in the QA suites repo.'],
+    ['task-2', 'og', 'Update save/load automation for the new cloud slot', 'automation_update', 'todo', 'u-sam', 'P1', -2, { kind: 'resource', id: 'res-3' }, 'Selectors changed after the 0.8.4 save menu rework.'],
+    ['task-3', 'og', 'Write test coverage for controller remapping', 'coverage', 'todo', 'u-taylor', 'P3', 10, { kind: 'suite', id: 'suite-ui' }, 'New settings screen ships in 0.8.5. Add cases for every input device.'],
+    ['task-4', 'og', 'Prepare test plan for 0.8.5', 'other', 'todo', ME, 'P2', 4, { kind: 'resource', id: 'res-7' }, 'Scope, platforms, owners and exit criteria.'],
+    ['task-5', 'og', 'Create coverage for the greenhouse weather events', 'coverage', 'in_progress', 'u-jamie', 'P2', 3, { kind: 'suite', id: 'suite-av' }, 'Rain, wind and night cycle visuals and audio.'],
+    ['task-6', 'og', 'Fix flaky inventory test on Android', 'automation_update', 'in_progress', 'u-alex', 'P1', -1, undefined, 'Fails about 1 in 5 runs on the device farm. Suspect a timing wait.'],
+    ['task-7', 'og', 'Smoke automation for build installs', 'automation_new', 'in_review', 'u-riley', 'P2', 1, { kind: 'run', id: 'run-smoke' }, 'Pull request is open, waiting for review from the team.'],
+    ['task-8', 'og', 'Code review meeting: automation pull requests', 'meeting', 'in_review', ME, 'P3', 0, undefined, 'Weekly review of open automation changes with the whole QA team.'],
+    ['task-9', 'og', 'Release readiness sync for 0.8.4 hotfix', 'meeting', 'done', ME, 'P2', -3, { kind: 'release', id: 'rel-084' }, 'Agreed the hold criteria with production.'],
+    ['task-10', 'og', 'Update story suite after chapter 2 rewrite', 'coverage', 'done', 'u-jamie', 'P3', -5, { kind: 'suite', id: 'suite-story' }, ''],
+    ['task-11', 'tt', 'Automate undo and redo for turns', 'automation_new', 'in_progress', 'u-taylor', 'P2', 5, { kind: 'suite', id: 'suite-tt-core' }, ''],
+    ['task-12', 'tt', 'Exploratory session on turn timers', 'other', 'todo', 'u-riley', 'P3', null, undefined, 'Look for edge cases when the timer runs out during an animation.'],
+  ];
+  const order: Record<string, number> = {};
+  return rows.map(([id, projectId, title, type, status, ownerId, priority, dueIn, link, description], i) => {
+    const key = status;
+    order[key] = (order[key] ?? -1) + 1;
+    return {
+      id,
+      projectId,
+      title,
+      description,
+      type,
+      status,
+      ownerId,
+      priority,
+      dueDate: dueIn === null ? undefined : due(dueIn),
+      link,
+      order: order[key],
+      createdAt: iso(-12 + i * 0.5),
+      updatedAt: iso(-1 - i * 0.1),
+      completedAt: status === 'done' ? iso(-2) : undefined,
+    };
+  });
 }

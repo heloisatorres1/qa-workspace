@@ -242,6 +242,38 @@ export interface ResourceLink {
   description: string;
 }
 
+// ---- QA tasks -------------------------------------------------------------
+
+export const TASK_STATUSES = ['todo', 'in_progress', 'in_review', 'done'] as const;
+export type TaskStatus = (typeof TASK_STATUSES)[number];
+
+export const TASK_TYPES = ['automation_new', 'automation_update', 'coverage', 'meeting', 'other'] as const;
+export type TaskType = (typeof TASK_TYPES)[number];
+
+export interface TaskLink {
+  kind: 'suite' | 'run' | 'release' | 'resource';
+  id: ID;
+}
+
+export interface QaTask {
+  id: ID;
+  projectId: ID;
+  title: string;
+  description: string;
+  type: TaskType;
+  status: TaskStatus;
+  ownerId: ID;
+  priority: Priority;
+  /** Calendar date, YYYY-MM-DD. */
+  dueDate?: string;
+  link?: TaskLink;
+  /** Position inside its status column, starting at 0. */
+  order: number;
+  createdAt: ISODate;
+  updatedAt: ISODate;
+  completedAt?: ISODate;
+}
+
 // ---- Integrations & delivery ---------------------------------------------
 
 export interface Route {
@@ -277,7 +309,7 @@ export interface AuditEvent {
   id: ID;
   at: ISODate;
   actorId: ID;
-  kind: 'finding' | 'run' | 'question' | 'build' | 'delivery' | 'release' | 'digest' | 'session' | 'library';
+  kind: 'finding' | 'run' | 'question' | 'build' | 'delivery' | 'release' | 'digest' | 'session' | 'library' | 'task';
   title: string;
   detail: string;
   link?: string;

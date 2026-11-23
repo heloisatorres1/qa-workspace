@@ -7,7 +7,8 @@ import { chatSummary } from '../domain/format';
 import { completeRun as completeRunDomain, createRun as createRunDomain, recordResult as recordResultDomain, reviseCase } from '../domain/runs';
 import { captureEvidence, releaseMessage, saveRevision, validateDecision, type DecisionDraft } from '../domain/release';
 import { buildDigest, createLedger, digestParent, digestReplies, fetchAllTasks, sendLedger, type DigestLedger, type FetchResult } from '../domain/digest';
-import type { AuditEvent, CaseRevision, DeliveryJob, Finding, FindingType, ID, Platform, ResourceLink, ResultValue, Route, Session } from '../domain/types';
+import type { AuditEvent, CaseRevision, DeliveryJob, Finding, FindingType, ID, Platform, QaTask, ResourceLink, ResultValue, Route, Session, TaskStatus } from '../domain/types';
+import { columnOf, moveTask, TASK_STATUS_LABEL, TASK_TYPE_LABEL } from '../domain/tasks';
 
 export const config = { deliveryDelayMs: 700 };
 
@@ -485,6 +486,47 @@ export async function sendDigest(ledgerId: ID) {
 
 export function discardLedger(ledgerId: ID) {
   update((s) => ({ ...s, ledgers: s.ledgers.filter((l) => l.id !== ledgerId) }));
+}
+
+// ---- QA tasks ---------------------------------------------------------------
+
+export type NewTask = Pick<QaTask, 'projectId' | 'title' | 'description' | 'type' | 'ownerId' | 'priority'> & Partial<Pick<QaTask, 'dueDate' | 'link'>>;
+
+/** Adds a task at the top of To do. */
+export function createTask(input: NewTask): ID {
+  const id = uid('task');
+  const at = nowIso();
+  const task: QaTask = { ...input, id, title: input.title.trim(), status: 'todo', order: -1, createdAt: at, updatedAt: at };
+  update((s) => ({ ...s, tasks: moveTask([...s.tasks, task], id, 'todo', 0, at) }));
+  logEvent({ kind: 'task', title: 'Task created', detail: `${task.title} · ${TASK_TYPE_LABEL[task.type]}`, link: '/tasks' });
+  return id;
+}
+
+/** Moves a task into `status`, just before `beforeId` (or to the end of the column). */
+export function moveTaskTo(id: ID, status: TaskStatus, beforeId?: ID) {
+  const s = store().get();
+  const from = s.tasks.find((t) => t.id === id);
+  if (!from) return;
+  const column = columnOf(s.tasks, status).filter((t) => t.id !== id);
+  const at = beforeId ? column.findIndex((t) => t.id === beforeId) : -1;
+  update((st) => ({ ...st, tasks: moveTask(st.tasks, id, status, at < 0 ? column.length : at, nowIso()) }));
+  if (from.status !== status)
+    logEvent({ kind: 'task', title: status === 'done' ? 'Task completed' : 'Task moved', detail: `${from.title} → ${TASK_STATUS_LABEL[status]}`, link: '/tasks' });
+}
+
+export function updateTask(id: ID, patch: Partial<Omit<QaTask, 'id' | 'order' | 'createdAt' | 'completedAt'>>) {
+  const { status, ...fields } = patch;
+  const current = store().get().tasks.find((t) => t.id === id);
+  if (!current) return;
+  if (status && status !== current.status) moveTaskTo(id, status);
+  update((s) => ({ ...s, tasks: s.tasks.map((t) => (t.id === id ? { ...t, ...fields, title: (fields.title ?? t.title).trim(), updatedAt: nowIso() } : t)) }));
+}
+
+export function deleteTask(id: ID) {
+  const task = store().get().tasks.find((t) => t.id === id);
+  if (!task) return;
+  update((s) => ({ ...s, tasks: s.tasks.filter((t) => t.id !== id).map((t) => (t.status === task.status && t.order > task.order ? { ...t, order: t.order - 1 } : t)) }));
+  logEvent({ kind: 'task', title: 'Task deleted', detail: task.title });
 }
 
 // ---- Library ----------------------------------------------------------------

@@ -9,6 +9,7 @@ import type {
   ISODate,
   Person,
   Project,
+  QaTask,
   Release,
   ResourceLink,
   Route,
@@ -20,6 +21,7 @@ import type {
 import type { DigestLedger, StatusMapping } from '../domain/digest';
 import type { DecisionDraft } from '../domain/release';
 import type { MockRemote } from '../integrations/mock';
+import { seedTasks } from './fixtures';
 
 export interface CaptureDraft {
   type: FindingType;
@@ -47,6 +49,7 @@ export interface AppState {
   routes: Route[];
   jobs: DeliveryJob[];
   events: AuditEvent[];
+  tasks: QaTask[];
   ledgers: DigestLedger[];
   remote: MockRemote;
   settings: { statusMapping: StatusMapping; digestChannel: string; releaseChannel: string; lastSyncAt: ISODate };
@@ -98,10 +101,15 @@ export function loadPersisted(): AppState | null {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as AppState;
-    return parsed.version === SCHEMA_VERSION ? parsed : null;
+    return parsed.version === SCHEMA_VERSION ? withTasks(parsed) : null;
   } catch {
     return null;
   }
+}
+
+/** Demo data saved before QA Tasks existed keeps its changes and gains the example tasks. */
+export function withTasks(s: AppState): AppState {
+  return Array.isArray(s.tasks) ? s : { ...s, tasks: seedTasks(Date.now()) };
 }
 
 export function persist(s: AppState) {
