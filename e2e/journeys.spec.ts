@@ -193,3 +193,19 @@ test('night mode follows the system and can be switched by hand', async ({ page 
   await expect(page.getByRole('button', { name: /^Theme: Dark/ })).toBeVisible();
   expect(await bg()).toBe('rgb(15, 24, 32)');
 });
+
+test('two filter changes in a row both stick', async ({ page }) => {
+  await page.goto('/#/triage?severity=critical&type=bug');
+  await expect(page.getByLabel(/^Severity/)).toHaveValue('critical');
+  // Clear both filters before the page has rendered the first change.
+  await page.evaluate(() => {
+    for (const id of ['f-sev', 'f-type']) {
+      const el = document.getElementById(id) as HTMLSelectElement;
+      el.value = '';
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  });
+  await expect(page).not.toHaveURL(/severity=|type=/);
+  await expect(page.getByLabel(/^Severity/)).toHaveValue('');
+  await expect(page.getByLabel(/^Type/)).toHaveValue('');
+});

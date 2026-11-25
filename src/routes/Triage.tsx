@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useSetUrlParam } from '../components/useSetUrlParam';
 import { Bug, CircleHelp, Download, MessageSquare, RefreshCw, Send } from 'lucide-react';
 import { useAppState } from '../data/state';
 import {
@@ -55,12 +56,7 @@ function FindingsView() {
   const owner = params.get('owner') ?? '';
   const build = params.get('build') ?? '';
   const awaiting = params.get('awaiting') === '1';
-  const setParam = (k: string, v: string) => {
-    const next = new URLSearchParams(params);
-    if (v) next.set(k, v);
-    else next.delete(k);
-    setParams(next, { replace: true });
-  };
+  const setParam = useSetUrlParam();
 
   const all = scopedFindings(s);
   const rows = all

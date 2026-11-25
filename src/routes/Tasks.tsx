@@ -1,5 +1,6 @@
 import { useMemo, useState, type ReactNode } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { useSetUrlParam } from '../components/useSetUrlParam';
 import { AlertCircle, CalendarDays, GripVertical, KanbanSquare, Link2, List, Plus, Trash2 } from 'lucide-react';
 import {
   closestCorners,
@@ -60,17 +61,11 @@ function linkOptions(s: AppState, kind: TaskLink['kind'], projectId: ID): { id: 
 
 export function Tasks() {
   const s = useAppState();
-  const [params, setParams] = useSearchParams();
+  const [params] = useSearchParams();
   const view = params.get('view') === 'list' ? 'list' : 'board';
   // Kept in local state so the checkbox responds instantly; the address follows for sharing and back links.
   const [mine, setMine] = useState(params.get('mine') === '1');
-  const setParam = (key: string, value: string | null) =>
-    setParams((p) => {
-      const next = new URLSearchParams(p);
-      if (value) next.set(key, value);
-      else next.delete(key);
-      return next;
-    }, { replace: true });
+  const setParam = useSetUrlParam();
   const [owner, setOwner] = useState('');
   const [type, setType] = useState<TaskType | ''>('');
   const [q, setQ] = useState('');
